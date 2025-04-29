@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мое Портфолио</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #f0f0f0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        :root {
+            --primary: #00ffe1;
+            --secondary: #ff007a;
+            --dark: #0f0f14;
+            --light-dark: #1a1a21;
+            --accent: #7d3cff;
+            --code-bg: #0e0e12;
+            --text-light: #f0f0f0;
+            --text-muted: #888;
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+        .header-wrapper {
+            position: relative;
+            text-align: center;
+            padding: 4rem 2rem 6rem;
+        }
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(17, 17, 20, 0.9), rgba(26, 26, 33, 0.85));
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: -1;
+        }
+        .profile-pic.variant1 {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 30px var(--primary);
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+        .profile-pic {
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+        .profile-pic:hover::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: inherit;
+            border: 2px dashed var(--primary);
+            animation: rotate-border 3s linear infinite;
+            z-index: -1;
+        }
+        @keyframes rotate-border {
+            to {transform: rotate(360deg);}
+        }
+        .name-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .name-container h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.2rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        .name-container h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from {opacity: 0.5;}
+            to {opacity: 1;}
+        }
+        .profession {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+        section {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        .about, .projects, .contact {
+            background: var(--light-dark);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 225, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        h2.title-section {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            position: relative;
+            padding-left: 2.5rem;
+            display: inline-block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            line-height: 1.4;
+        }
+        h2.title-section::before {
+            content: '//';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+            top: 0;
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 320px));
+            gap: 1.8rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+        .project-card {
+            background: var(--dark);
+            border-radius: 15px;
+            padding: 1rem;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 1px solid rgba(0, 255, 225, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        .project-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 15px 30px var(--primary);
+            border-color: rgba(0, 255, 225, 0.2);
+        }
+        .project-image {
+            width: 100%;
+            height: 140px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .project-card:hover .project-image {
+            transform: scale(1.02);
+        }
+        .project-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0;
+        }
+        .project-title::after {
+            content: '>';
+            color: var(--secondary);
+            margin-left: 5px;
+        }
+        .project-description {
+            flex-grow: 1;
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .details-btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background: var(--primary);
+            border-radius: 30px;
+            color: #000;
+            font-weight: 700;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition);
+            width: 100%;
+            max-width: 160px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .details-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 20px var(--primary);
+            color: #fff;
+        }
+        .contact-btn {
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 0.7rem 1.6rem;
+            background: var(--accent);
+            border-radius: 30px;
+            color: #000;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 0 10px var(--accent);
+        }
+        .contact-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px var(--accent);
+            color: #fff;
+        }
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            z-index: 1;
+            position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .terminal-line {
+            position: relative;
+            padding: 8px 0;
+            margin-bottom: 0.8rem;
+        }
+        .terminal-line::before {
+            content: '➜';
+            color: var(--secondary);
+            margin-right: 8px;
+            position: absolute;
+            left: 0;
+        }
+        .terminal-line span {
+            display: block;
+            margin-left: 20px;
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 1.2rem;
+        }
+        .skill-tag {
+            background: var(--code-bg);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(0, 255, 225, 0.2);
+            transition: var(--transition);
+        }
+        .skill-tag:hover {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+        }
+        .matrix-code {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><text x="0" y="15" fill="%2300ffe180" font-size="16">01</text></svg>') repeat;
+            animation: matrixScroll 30s linear infinite;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        @keyframes matrixScroll {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100%); }
+        }
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a, #3a3a3a);
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .header-wrapper {
+                padding: 3rem 1.5rem 5rem;
+                flex-direction: column;
+            }
+            .header-bg {
+                height: auto;
+                min-height: 280px;
+            }
+            .profile-pic.variant1 {
+                width: 150px;
+                height: 150px;
+            }
+            h1.name-container h1 {
+                font-size: 2.2rem;
+            }
+            section {
+                margin: 2.5rem auto;
+                padding: 1.5rem;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .about, .projects, .contact {
+                padding: 2rem;
+            }
+            h2.title-section {
+                font-size: 1.6rem;
+                padding-left: 2rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .profile-pic.variant1 {
+                width: 120px;
+                height: 120px;
+            }
+            h1.name-container h1 {
+                letter-spacing: 1px;
+            }
+            .skills {
+                gap: 6px;
+            }
+            .skill-tag {
+                padding: 3px 10px;
+                font-size: 0.8rem;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .name-container h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+
+    <!-- Header с фоном -->
+    <header class="header-wrapper">
+        <div class="header-bg"></div>
+        <img src="my_photo.jpg" alt="Моя фотография" class="profile-pic variant1">
+        <div class="name-container">
+            <h1>ALEX BUDARIN</h1>
+            <p class="profession">// Junior Unity-разработчик с годом опыта создания игр</p>
+        </div>
+    </header>
+
+    <section class="about">
+        <h2 class="title-section">Обо мне</h2>
+        <div class="terminal-line"><span>Разрабатываю игры на Unity с 2024 года</span></div>
+        <div class="terminal-line"><span>Создал более 1 проекта, от мобильной аркады до нихуя</span></div>
+        <div class="terminal-line"><span>Неплохо разбираюсь в C# и создании игровых механик</span></div>
+        <div class="terminal-line"><span>Люблю своё дело и всегда готов учится новому!</span></div>
+        <div class="skills">
+            <span class="skill-tag">Unity</span>
+            <span class="skill-tag">C#</span>
+            <span class="skill-tag">GameDev</span>
+            <span class="skill-tag">2D/3D</span>
+            <span class="skill-tag">UI/UX</span>
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">Agile</span>
+        </div>
+    </section>
+
+    <section class="projects">
+        <h2 class="title-section">Мои проекты</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <img src="spaceflyer-screenshot.jpg" alt="SpaceFlyer" class="project-image">
+                <h3 class="project-title">SpaceFlyer <span></span></h3>
+                <p class="project-description">Кросплатформенная аркада, которую я сделал за неделю</p>
+                <p class="project-description">Проект создавался для получения опыта работы с площадкой "Яндекс игры!"</p>
+                <a href="https://example.com/spaceflyer" target="_blank" class="details-btn">Подробнее</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <h2 class="title-section">Связаться со мной</h2>
+        <div class="terminal-line"><span>Telegram: @ti_kto1</span></div>
+        <a href="tg://resolve?domain=ivan_unitydev" class="contact-btn">Написать в Telegram</a>
+    </section>
+
+    <footer>
+        &copy; 2025 Budarin Alexander. Все права защищены.
+    </footer>
+
+    <!-- Canvas для матрицы -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Скрипт матрицы -->
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Символы для матрицы
+        const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\[]{}()@#$%^&*';
+        const fontSize = 16;
+
+        let columns = Math.floor(canvas.width / fontSize);
+        let drops = Array(columns).fill(1);
+
+        function drawMatrix() {
+            // Черный фон с прозрачностью
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Цвет текста
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = symbols.charAt(Math.floor(Math.random() * symbols.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = Math.floor(canvas.width / fontSize);
+            drops = Array(columns).fill(1);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        setInterval(drawMatrix, 50);
+    </script>
+</body>
+</html>
